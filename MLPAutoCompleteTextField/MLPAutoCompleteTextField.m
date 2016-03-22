@@ -412,9 +412,17 @@ withAutoCompleteString:(NSString *)string
 - (void)expandKeyboardAutoCompleteTableForNumberOfRows:(NSInteger)numberOfRows
 {
     if(numberOfRows && (self.autoCompleteTableViewHidden == NO)){
-        [self.autoCompleteTableView setAlpha:1];
+        //Fix problems with backgroundColor after re-adding inputAccessoryView (on iOS 9+)
+        self.autoCompleteTableView.backgroundColor = self.autoCompleteTableBackgroundColor;
+
+        //Re-adding inputAccessoryView to screen
+        self.inputAccessoryView = self.autoCompleteTableView;
+        [self reloadInputViews];
     } else {
-        [self.autoCompleteTableView setAlpha:0];
+        
+        //Removing inputAccessoryView from screen as there's no need in it
+        self.inputAccessoryView = nil;
+        [self reloadInputViews];
     }
 }
 
